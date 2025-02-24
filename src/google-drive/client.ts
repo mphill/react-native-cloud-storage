@@ -187,4 +187,12 @@ export default class GoogleDriveApiClient {
       baseUrl: BASE_UPLOAD_URL,
     });
   }
+
+  public async downloadFile(fileId: string): Promise<string> {
+    return this.request<string>(`/files/${fileId}`, {
+      queryParameters: { alt: 'media' },
+      method: 'GET',
+      headers: { Accept: 'text/plain' },
+    });
+  }
 }

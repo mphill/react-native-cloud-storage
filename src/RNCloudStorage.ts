@@ -282,7 +282,12 @@ export default class RNCloudStorage {
    * @param scope The directory scope the path is in. Defaults to set default scope set for the current provider.
    * @returns A promise that resolves once the download has been triggered.
    */
-  downloadFile(path: string, scope?: CloudStorageScope): Promise<void> {
+  downloadFile(path: string, scope?: CloudStorageScope): Promise<void | string> {
+    if (this.provider.provider === CloudStorageProvider.GoogleDrive) {
+      // For Google Drive, we get back the file contents
+      return this.nativeInstance.downloadFile(path, scope ?? this.provider.options.scope);
+    }
+    // For iCloud, we trigger the download
     return this.nativeInstance.downloadFile(path, scope ?? this.provider.options.scope);
   }
 
@@ -323,6 +328,32 @@ export default class RNCloudStorage {
       isDirectory: () => native.isDirectory,
       isFile: () => native.isFile,
     };
+  }
+
+  /**
+   * Uploads a binary file from a local path to the cloud storage.
+   * @param remotePath The path where the file should be stored in the cloud.
+   * @param sourcePath The local path of the file to upload.
+   * @param scope The directory scope the path is in. Defaults to the default scope set for the current provider.
+   * @returns A promise that resolves when the file has been uploaded.
+   */
+  uploadBinaryFile(remotePath: string, sourcePath: string, scope?: CloudStorageScope): Promise<void> {
+    return this.nativeInstance.createBinaryFile(remotePath, sourcePath, scope ?? this.provider.options.scope);
+  }
+
+  /**
+   * Downloads a binary file from the cloud storage to a local path.
+   * @param remotePath The path of the file in the cloud storage.
+   * @param localDestinationPath The local path where the file should be downloaded to.
+   * @param scope The directory scope the path is in. Defaults to the default scope set for the current provider.
+   * @returns A promise that resolves when the file has been downloaded.
+   */
+  downloadBinaryFile(remotePath: string, localDestinationPath: string, scope?: CloudStorageScope): Promise<void> {
+    return this.nativeInstance.downloadBinaryFile(
+      remotePath,
+      localDestinationPath,
+      scope ?? this.provider.options.scope
+    );
   }
   //#endregion
 
@@ -443,7 +474,7 @@ export default class RNCloudStorage {
    * @param scope The directory scope the path is in. Defaults to the default scope set for the default static instance.
    * @returns A promise that resolves once the download has been triggered.
    */
-  static downloadFile(path: string, scope?: CloudStorageScope): Promise<void> {
+  static downloadFile(path: string, scope?: CloudStorageScope): Promise<void | string> {
     return RNCloudStorage.getDefaultInstance().downloadFile(path, scope);
   }
 
@@ -476,6 +507,32 @@ export default class RNCloudStorage {
    */
   static stat(path: string, scope?: CloudStorageScope): Promise<CloudStorageFileStat> {
     return RNCloudStorage.getDefaultInstance().stat(path, scope);
+  }
+
+  /**
+   * Uploads a binary file from a local path to the cloud storage in the provider of the default static instance.
+   * @param remotePath The path where the file should be stored in the cloud.
+   * @param sourcePath The local path of the file to upload.
+   * @param scope The directory scope the path is in. Defaults to the default scope set for the default static instance.
+   * @returns A promise that resolves when the file has been uploaded.
+   */
+  static uploadBinaryFile(remotePath: string, sourcePath: string, scope?: CloudStorageScope): Promise<void> {
+    return RNCloudStorage.getDefaultInstance().uploadBinaryFile(remotePath, sourcePath, scope);
+  }
+
+  /**
+   * Downloads a binary file from the cloud storage in the provider of the default static instance to a local path.
+   * @param remotePath The path of the file in the cloud storage.
+   * @param localDestinationPath The local path where the file should be downloaded to.
+   * @param scope The directory scope the path is in. Defaults to the default scope set for the default static instance.
+   * @returns A promise that resolves when the file has been downloaded.
+   */
+  static downloadBinaryFile(
+    remotePath: string,
+    localDestinationPath: string,
+    scope?: CloudStorageScope
+  ): Promise<void> {
+    return RNCloudStorage.getDefaultInstance().downloadBinaryFile(remotePath, localDestinationPath, scope);
   }
   //#endregion
 }

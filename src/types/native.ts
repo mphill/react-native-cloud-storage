@@ -38,5 +38,11 @@ export default interface NativeRNCloudStorage {
   deleteFile: (path: string, scope: NativeRNCloudCloudStorageScope) => Promise<void>;
   deleteDirectory: (path: string, recursively: boolean, scope: NativeRNCloudCloudStorageScope) => Promise<void>;
   statFile: (path: string, scope: NativeRNCloudCloudStorageScope) => Promise<NativeRNCloudCloudStorageFileStat>;
+  createBinaryFile: (remotePath: string, sourcePath: string, scope: NativeRNCloudCloudStorageScope) => Promise<void>;
+  downloadBinaryFile: (
+    remotePath: string,
+    localDestinationPath: string,
+    scope: NativeRNCloudCloudStorageScope
+  ) => Promise<void>;
   isCloudAvailable: () => Promise<boolean>;
 }

@@ -3,7 +3,10 @@ import Foundation
 @objc(CloudStorage)
 class CloudStorage: NSObject {
   @objc(fileExists:withScope:withResolver:withRejecter:)
-  func fileExists(path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func fileExists(
+    path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
     withPromise(resolve: resolve, reject: reject) {
       let fileUrl = try CloudKitUtils.getFileURL(path: path, scope: scope)
       return try FileUtils.checkFileExists(fileUrl: fileUrl)
@@ -11,7 +14,10 @@ class CloudStorage: NSObject {
   }
 
   @objc(appendToFile:withData:withScope:withResolver:withRejecter:)
-  func appendToFile(path: String, data: String, scope: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func appendToFile(
+    path: String, data: String, scope: String, resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
     withPromise(resolve: resolve, reject: reject) {
       let fileUrl = try CloudKitUtils.getFileURL(path: path, scope: scope)
 
@@ -26,7 +32,10 @@ class CloudStorage: NSObject {
   }
 
   @objc(createFile:withData:withScope:withOverwrite:withResolver:withRejecter:)
-  func createFile(path: String, data: String, scope: String, overwrite: Bool, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func createFile(
+    path: String, data: String, scope: String, overwrite: Bool,
+    resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
+  ) {
     withPromise(resolve: resolve, reject: reject) {
       let fileUrl = try CloudKitUtils.getFileURL(path: path, scope: scope)
 
@@ -39,7 +48,10 @@ class CloudStorage: NSObject {
   }
 
   @objc(createDirectory:withScope:withResolver:withRejecter:)
-  func createDirectory(path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func createDirectory(
+    path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
     withPromise(resolve: resolve, reject: reject) {
       let fileUrl = try CloudKitUtils.getFileURL(path: path, scope: scope)
       return try FileUtils.createDirectory(directoryUrl: fileUrl)
@@ -47,7 +59,10 @@ class CloudStorage: NSObject {
   }
 
   @objc(listFiles:withScope:withResolver:withRejecter:)
-  func listFiles(path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func listFiles(
+    path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
     withPromise(resolve: resolve, reject: reject) {
       let fileUrl = try CloudKitUtils.getFileURL(path: path, scope: scope)
       return try FileUtils.listFiles(directoryUrl: fileUrl)
@@ -55,7 +70,10 @@ class CloudStorage: NSObject {
   }
 
   @objc(readFile:withScope:withResolver:withRejecter:)
-  func readFile(path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func readFile(
+    path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
     withPromise(resolve: resolve, reject: reject) {
       let fileUrl = try CloudKitUtils.getFileURL(path: path, scope: scope)
       return try FileUtils.readFile(fileUrl: fileUrl)
@@ -63,7 +81,10 @@ class CloudStorage: NSObject {
   }
 
   @objc(downloadFile:withScope:withResolver:withRejecter:)
-  func downloadFile(path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func downloadFile(
+    path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
     withPromise(resolve: resolve, reject: reject) {
       let fileUrl = try CloudKitUtils.getFileURL(path: path, scope: scope)
       return try CloudKitUtils.downloadFile(fileUrl: fileUrl)
@@ -71,7 +92,10 @@ class CloudStorage: NSObject {
   }
 
   @objc(deleteFile:withScope:withResolver:withRejecter:)
-  func deleteFile(path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func deleteFile(
+    path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
     withPromise(resolve: resolve, reject: reject) {
       let fileUrl = try CloudKitUtils.getFileURL(path: path, scope: scope)
       return try FileUtils.deleteFileOrDirectory(fileUrl: fileUrl)
@@ -79,7 +103,10 @@ class CloudStorage: NSObject {
   }
 
   @objc(deleteDirectory:withRecursive:withScope:withResolver:withRejecter:)
-  func deleteDirectory(path: String, recursive _: Bool, scope: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func deleteDirectory(
+    path: String, recursive _: Bool, scope: String, resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
     withPromise(resolve: resolve, reject: reject) {
       let fileUrl = try CloudKitUtils.getFileURL(path: path, scope: scope)
       return try FileUtils.deleteFileOrDirectory(fileUrl: fileUrl)
@@ -87,7 +114,10 @@ class CloudStorage: NSObject {
   }
 
   @objc(statFile:withScope:withResolver:withRejecter:)
-  func statFile(path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func statFile(
+    path: String, scope: String, resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
     withPromise(resolve: resolve, reject: reject) {
       let fileUrl = try CloudKitUtils.getFileURL(path: path, scope: scope)
       return try FileUtils.statFile(fileUrl: fileUrl).toDictionary()
@@ -95,9 +125,67 @@ class CloudStorage: NSObject {
   }
 
   @objc(isCloudAvailable:withRejecter:)
-  func isCloudAvailable(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func isCloudAvailable(
+    resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
+  ) {
     withPromise(resolve: resolve, reject: reject) {
       CloudKitUtils.isCloudKitAvailable()
+    }
+  }
+
+  @objc(createBinaryFile:sourcePath:scope:resolver:rejecter:)
+  func createBinaryFile(
+    _ remotePath: String,
+    sourcePath: String,
+    scope: String,
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
+    do {
+      let directoryScope = try DirectoryScope(rawValue: scope) ?? .appData
+      let remoteUrl = try getCloudUrl(path: remotePath, scope: directoryScope)
+      let sourceUrl = URL(fileURLWithPath: sourcePath)
+
+      // Create parent directories if needed
+      if let parentUrl = remoteUrl.deletingLastPathComponent() as URL? {
+        try FileUtils.createDirectory(directoryUrl: parentUrl)
+      }
+
+      // Copy file to iCloud
+      try FileManager.default.copyItem(at: sourceUrl, to: remoteUrl)
+      resolve(nil)
+    } catch let error as CloudStorageError {
+      reject(error.code, error.localizedDescription, error)
+    } catch {
+      reject(CloudStorageError.unknown().code, error.localizedDescription, error)
+    }
+  }
+
+  @objc(downloadBinaryFile:localDestinationPath:scope:resolver:rejecter:)
+  func downloadBinaryFile(
+    _ remotePath: String,
+    localDestinationPath: String,
+    scope: String,
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
+    do {
+      let directoryScope = try DirectoryScope(rawValue: scope) ?? .appData
+      let remoteUrl = try getCloudUrl(path: remotePath, scope: directoryScope)
+      let destinationUrl = URL(fileURLWithPath: localDestinationPath)
+
+      // Create parent directories if needed
+      if let parentUrl = destinationUrl.deletingLastPathComponent() as URL? {
+        try FileUtils.createDirectory(directoryUrl: parentUrl)
+      }
+
+      // Copy file from iCloud
+      try FileManager.default.copyItem(at: remoteUrl, to: destinationUrl)
+      resolve(nil)
+    } catch let error as CloudStorageError {
+      reject(error.code, error.localizedDescription, error)
+    } catch {
+      reject(CloudStorageError.unknown().code, error.localizedDescription, error)
     }
   }
 }

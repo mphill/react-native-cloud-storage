@@ -396,4 +396,74 @@ export default class GoogleDrive implements NativeproviderService {
       isFile: file.mimeType !== MimeTypes.FOLDER,
     };
   }
+
+  async createBinaryFile(remotePath: string, sourcePath: string, scope: NativeRNCloudCloudStorageScope): Promise<void> {
+    const fileId = await this.getFileId(remotePath, scope);
+    const fileData = await this.readLocalFile(sourcePath);
+
+    if (fileId) {
+      // Update existing file
+      await this.drive.updateFile(fileId, {
+        mimeType: MimeTypes.BINARY,
+        body: fileData,
+      });
+    } else {
+      // Create new file
+      const parentId = await this.getParentId(remotePath, scope);
+      await this.drive.createFile(
+        {
+          name: this.getFileName(remotePath),
+          parents: parentId ? [parentId] : undefined,
+        },
+        {
+          mimeType: MimeTypes.BINARY,
+          body: fileData,
+        }
+      );
+    }
+  }
+
+  async downloadBinaryFile(
+    remotePath: string,
+    localDestinationPath: string,
+    scope: NativeRNCloudCloudStorageScope
+  ): Promise<void> {
+    const fileId = await this.getFileId(remotePath, scope);
+    if (!fileId) {
+      throw new CloudStorageError('File not found', CloudStorageErrorCode.FILE_NOT_FOUND);
+    }
+
+    const fileData = await this.drive.downloadFile(fileId);
+    await this.writeLocalFile(localDestinationPath, fileData);
+  }
+
+  private async readLocalFile(path: string): Promise<string> {
+    try {
+      const fs = require('fs');
+      return await fs.promises.readFile(path, 'utf8');
+    } catch (error) {
+      throw new CloudStorageError('Failed to read local file', CloudStorageErrorCode.READ_ERROR);
+    }
+  }
+
+  private async writeLocalFile(path: string, data: string): Promise<void> {
+    try {
+      const fs = require('fs');
+      await fs.promises.writeFile(path, data, 'utf8');
+    } catch (error) {
+      throw new CloudStorageError('Failed to write local file', CloudStorageErrorCode.WRITE_ERROR);
+    }
+  }
+
+  private async getParentId(path: string, scope: NativeRNCloudCloudStorageScope): Promise<string | undefined> {
+    const parentPath = path.split('/').slice(0, -1).join('/');
+    if (!parentPath) {
+      return undefined;
+    }
+    return this.getFileId(parentPath, scope);
+  }
+
+  private getFileName(path: string): string {
+    return path.split('/').pop() || '';
+  }
 }
